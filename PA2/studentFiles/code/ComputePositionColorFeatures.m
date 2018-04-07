@@ -20,4 +20,13 @@ function features = ComputePositionColorFeatures(img)
     %                              YOUR CODE HERE                             %
     %                                                                         %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    features(:,:,1) = img(:,:,1);
+    features(:,:,2) = img(:,:,2);
+    features(:,:,3) = img(:,:,3);
+    for i = 1:height
+        for j = 1:width
+            features(i,j,4) = j;            %x coordinate
+            features(i,j,5) = i;            %y coordinate
+        end
+    end
 end

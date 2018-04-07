@@ -1,4 +1,4 @@
-function featuresNorm = NormalizeFeatures(features)
+function featuresNorm = NormalizeFeaturesRescaling(features)
 % Normalize image features to have zero mean and unit variance. This
 % normalization can cause k-means clustering to perform better.
 %
@@ -24,6 +24,6 @@ function featuresNorm = NormalizeFeatures(features)
      for k = 1:size(featuresNorm,3)
                 feature_k = features(:,:,k);
                 featuremat = feature_k(:);
-                featuresNorm(:,:,k) = (features(:,:,k) - mean(featuremat)) ./ std(featuremat);
+                featuresNorm(:,:,k) = (features(:,:,k) - min(featuremat)) ./ (max(featuremat) - min(featuremat));
      end
 end

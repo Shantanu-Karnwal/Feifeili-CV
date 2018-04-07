@@ -79,6 +79,10 @@ function idx = HAClustering(X, k, visualize2D)
     % of clusters to merge at each step by finding the smallest element of
     % the dists matrix. We never want to merge a cluster with itself;
     % therefore we set the diagonal elements of dists to be +Inf.
+    
+    % Came to know about squareform and pdist from this url 
+    % https://www.mathworks.com/help/stats/squareform.html
+    
     dists = squareform(pdist(centroids));
     dists = dists + diag(Inf(m, 1));
     
@@ -108,7 +112,11 @@ function idx = HAClustering(X, k, visualize2D)
         %                            YOUR CODE HERE                           %
         %                                                                     %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
+        [min_value_per_row, column_indexes] = min(dists);
+        [~, row_index] = min(min_value_per_row);
+        % Don't care what the global min value comes out to be
+        i = row_index;
+        j = column_indexes(row_index);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %                                                                     %
         %                            END YOUR CODE                            %
@@ -135,7 +143,11 @@ function idx = HAClustering(X, k, visualize2D)
         %                            YOUR CODE HERE                           %
         %                                                                     %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      
-        
+        for w = 1:m
+            if idx(w) == j
+                idx(w) = i;
+            end
+        end
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %                                                                     %
         %                            END YOUR CODE                            %
@@ -151,7 +163,9 @@ function idx = HAClustering(X, k, visualize2D)
         %                            YOUR CODE HERE                           %
         %                                                                     %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
+        newclustersize = cluster_sizes(i) + cluster_sizes(j);        
+        centroids(i,:) = (cluster_sizes(i) * centroids(i,:) + cluster_sizes(j) * centroids(j,:)) ./ newclustersize;
+        centroids(j,:) = +Inf;
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %                                                                     %
         %                            END YOUR CODE                            %
@@ -164,7 +178,8 @@ function idx = HAClustering(X, k, visualize2D)
         %                            YOUR CODE HERE                           %
         %                                                                     %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
+        cluster_sizes(i) = cluster_sizes(i) + cluster_sizes(j);
+        cluster_sizes(j) = 0;
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %                                                                     %
         %                            END YOUR CODE                            %
@@ -180,7 +195,10 @@ function idx = HAClustering(X, k, visualize2D)
         %                            YOUR CODE HERE                           %
         %                                                                     %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
+        dists = squareform(pdist(centroids));
+        dists = dists + diag(Inf(m, 1));
+        % Copied lines 86-87
+        % Just make them new
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %                                                                     %
         %                            END YOUR CODE                            %

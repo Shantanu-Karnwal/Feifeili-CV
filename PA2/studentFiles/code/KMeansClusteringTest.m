@@ -6,7 +6,6 @@ function KMeansClusteringTest(visualize)
 % INPUT
 % visualize - Whether or not to visualize each step of the KMeans
 %             algorithm. Optional; default is true.
-
     if nargin < 1
         visualize = true;
     end

@@ -45,7 +45,10 @@ function idx = KMeansClustering(X, k, visualize2D, centers)
         %                            YOUR CODE HERE                           %
         %                                                                     %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
+        random_center_numbers = randperm(m);
+        for i = 1:k
+            centers(i,:) = X(random_center_numbers(i),:);
+        end
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %                                                                     %
         %                            END YOUR CODE                            %
@@ -77,6 +80,19 @@ function idx = KMeansClustering(X, k, visualize2D, centers)
         %                                                                     %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
+        distances = zeros(m,k);
+        for i = 1:m
+            for j = 1:k
+                distances(i,j) = sqrt(sum((X(i,:) - centers(j,:)).^2));
+            end
+        end
+        % Distances Computed - - Lets assign clusters
+        for i = 1:m
+            [~,idx(i)] = min(distances(i,:));
+        end
+        % ~ is a dummy since we don't need the minimum value, just the
+        % index of minimum value is enough
+        
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %                                                                     %
         %                            END YOUR CODE                            %
@@ -94,7 +110,10 @@ function idx = KMeansClustering(X, k, visualize2D, centers)
         %                            YOUR CODE HERE                           %
         %                                                                     %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
+        for i = 1:k
+            clusterSize = sum(idx == i);
+            centers(i,:) = sum(X(idx == i,:)) ./ clusterSize;
+        end
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %                                                                     %
         %                            END YOUR CODE                            %

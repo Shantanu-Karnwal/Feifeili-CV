@@ -14,10 +14,25 @@ function features = ComputeFeatures(img)
     img = double(img);
     height = size(img, 1);
     width = size(img, 2);
-    features = zeros([height, width, 1]);
+    features = zeros(height, width, 6);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %                                                                         %
     %                              YOUR CODE HERE                             %
     %                                                                         %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    features(:,:,1) = img(:,:,1);
+    features(:,:,2) = img(:,:,2);
+    features(:,:,3) = img(:,:,3);
+    for i = 1:height
+        for j = 1:width
+            features(i,j,4) = j;            %x coordinate
+            features(i,j,5) = i;            %y coordinate
+        end
+    end
+    
+    %Adding Vertical Gradients and edges
+    imgLeft = img(:,1:width-1);
+    imgRight = img(:,2:width);
+    features(:,2:width,6) = imgRight - imgLeft;
+
 end
